@@ -5,8 +5,11 @@ contains few algorithms and their usage implementation.
 
 All projects require Java 8 and Maven.
 
+Please not that main goal of this projects is efficiency (both time and memory) hence using *Arrays*
+instead of *ArrayList* or *byte[]* instead of *Enum* values.
+
 If not stated otherwise in a specific project you may compile each module using:
-`mvn package assembly:single` from specific project directory.
+`mvn compile assembly:single` from specific project directory.
 To run each project please use `java -jar target/$PROJECT_JAR`.
 
 ## Algorithms
@@ -14,6 +17,7 @@ To run each project please use `java -jar target/$PROJECT_JAR`.
 Currently this project contains following algorithms:
 
 1. [Percolation](#percolation)
+2. [Queues](#queues)
 
 ### Percolation
 
@@ -61,7 +65,7 @@ This program estimates the threshold value _p*_ using [Monte Carlo simulation](h
 
 Build the project using
 ```
-$ mvn package assembly:single
+$ mvn compile assembly:single
 ```
 then run it like `java -jar $JAR gridSize trialsNumber`.
 This is going to compute *trialsNumber* simulations on *gridSize*-by-*gridSize* grid.
@@ -74,3 +78,26 @@ mean                    = 0.5930502000000007
 stddev                  = 0.015540738954233215
 95% confidence interval = [0.5923690970850447, 0.5937313029149568]
 ```
+
+### Queues
+
+**Dequeue.** A double-ended queue or deque (pronounced "deck") is a generalization of a stack and a queue
+that supports adding and removing items from either the front or the back of the data structure.
+
+**Randomized queue.** A randomized queue is similar to a stack or queue, except that the item removed
+is chosen uniformly at random from items in the data structure.
+
+**Permutation client.** Client program that takes a command-line integer *k*,
+reads in a sequence of strings from standard input and prints exactly *k* of them, uniformly at random.
+Assumption is made that *0* ≤ *k* ≤ *n*, where *n* is the number of string on standard input.
+
+Example usage:
+```
+$ cat examples/distinct.txt 
+A B C D E F G H I
+$ java -jar target/queues-1.0-SNAPSHOT-jar-with-dependencies.jar 3 < examples/distinct.txt 
+H
+G
+F
+```
+
