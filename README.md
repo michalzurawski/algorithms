@@ -12,12 +12,16 @@ If not stated otherwise in a specific project you may compile each module using:
 `mvn compile assembly:single` from specific project directory.
 To run each project please use `java -jar target/$PROJECT_JAR`.
 
+Javadoc documentation can be generated using `mvn javadoc:javadoc`.
+This will create directory `target/site/apidocs` where `index.html` can be found.
+
 ## Algorithms
 
 Currently this project contains following algorithms:
 
 1. [Percolation](#percolation)
 2. [Queues](#queues)
+3. [Collinear Points](#collinear-points)
 
 ### Percolation
 
@@ -101,3 +105,74 @@ G
 F
 ```
 
+### Collinear Points
+
+Computer vision involves analyzing patterns in visual images and reconstructing the real-world objects
+that produced them. The process is often broken up into two phases:
+*feature detection* and *pattern recognition*.
+Feature detection involves selecting important features of the image;
+pattern recognition involves discovering patterns in the features.
+We will investigate a particularly clean pattern recognition problem involving points and line segments.
+This kind of pattern recognition arises in many other applications such as statistical data analysis.
+
+**The problem.** Given a set of *n* distinct points in the plane,
+find every (maximal) line segment that connects a subset of 4 or more of the points.
+
+![lines](collinear-points/lines.png "Lines")
+
+**Brute force.** BruteCollinearPoints examines 4 points at a time and checks
+whether they all lie on the same line segment, returning all such line segments.
+To check whether the 4 points *p*, *q*, *r*, and *s* are collinear,
+it checks whether the three slopes between *p* and *q*,
+between *p* and *r*, and between *p* and *s* are all equal.
+
+**A faster, sorting-based solution.** Remarkably, it is possible to solve the problem much faster
+than the brute-force solution described above.
+Given a point *p*, the following method determines whether *p* participates in a set of 4
+or more collinear points.
+
+* Think of *p* as the origin.
+* For each other point *q*, determine the slope it makes with *p*.
+* Sort the points according to the slopes they makes with *p*.
+* Check if any 3 (or more) adjacent points in the sorted order have equal slopes with respect to *p*. If so, these points, together with *p*, are collinear.
+
+Applying this method for each of the *n* points in turn yields an efficient algorithm to the problem.
+The algorithm solves the problem because points that have equal slopes with respect to *p* are collinear
+and sorting brings such points together. The algorithm is fast because the bottleneck operation is sorting.
+
+![lines](collinear-points/sorted.png "Sorted points")
+
+**Sample client.** The client program takes the name of an input file as a command-line argument,
+reads the input file (in the format specified below),
+prints to standard output the line segments that your program discovers, one per line
+and draws to standard draw the line segments.
+
+Example usage:
+```
+$ cat src/test/resources/equidistant.txt
+15
+10000 0
+8000 2000
+2000 8000
+0  10000
+
+20000 0
+18000 2000
+2000 18000
+
+10000 20000
+30000 0
+0 30000
+20000 10000
+
+13000 0
+11000 3000
+5000 12000
+9000 6000
+
+$ java -jar target/collineearpoints-1.0-SNAPSHOT-jar-with-dependencies.jar src/test/resources/equidistant.txt
+(10000, 0) -> (0, 10000)
+(10000, 0) -> (30000, 0)
+(13000, 0) -> (5000, 12000)
+(30000, 0) -> (0, 30000)
+```
