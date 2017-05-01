@@ -9,11 +9,12 @@ Please not that main goal of this projects is efficiency (both time and memory) 
 instead of *ArrayList* or *byte[]* instead of *Enum* values.
 
 If not stated otherwise in a specific project you may compile each module using:
-`mvn compile assembly:single` from specific project directory.
-To run each project please use `java -jar target/$PROJECT_JAR`.
+`mvn compile assembly:single` from specific project directory
+or from parent directory to build all projects.
+To run each project please use `java -jar $PROJECT_DIR/target/$PROJECT_JAR`.
 
-Javadoc documentation can be generated using `mvn javadoc:javadoc`.
-This will create directory `target/site/apidocs` where `index.html` can be found.
+Javadoc documentation can be generated using `mvn javadoc:aggregate`.
+It is also available at [GitHub Pages](https://michalzurawski.github.io).
 
 ## Algorithms
 

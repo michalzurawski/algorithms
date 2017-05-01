@@ -1,86 +1,99 @@
-/******************************************************************************
- *  Compilation:  javac PercolationVisualizer.java
- *  Execution:    java PercolationVisualizer input.txt
- *  Dependencies: Percolation.java
- *
- *  This program takes the name of a file as a command-line argument.
- *  From that file, it
- *
- *    - Reads the grid size n of the percolation system.
- *    - Creates an n-by-n grid of sites (intially all blocked)
- *    - Reads in a sequence of sites (row i, column j) to open.
- *
- *  After each site is opened, it draws full sites in light blue,
- *  open sites (that aren't full) in white, and blocked sites in black,
- *  with with site (1, 1) in the upper left-hand corner.
- *
- ******************************************************************************/
 package com.github.michalzurawski.algorithms.percolation;
 
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
 
-import java.awt.*;
+import java.awt.Font;
 
-public class PercolationVisualizer {
+/**
+ * After each site is opened, it draws full sites in light blue,
+ * open sites (that aren't full) in white, and blocked sites in black,
+ * with with site (1, 1) in the upper left-hand corner.
+ */
+public final class PercolationVisualizer {
+  /**
+   * Utility class.
+   */
+  private PercolationVisualizer() {
+  }
 
-  // delay in miliseconds (controls animation speed)
+  /**
+   * Delay in milliseconds (controls animation speed).
+   */
   private static final int DELAY = 100;
 
-  // draw n-by-n percolation system
-  public static void draw(Percolation perc, int n) {
+  /**
+   * Draws n-by-n percolation system.
+   *
+   * @param percolation percolation system to draw
+   * @param n           length of the grid
+   */
+  public static void draw(final Percolation percolation, final int n) {
     StdDraw.clear();
     StdDraw.setPenColor(StdDraw.BLACK);
-    StdDraw.setXscale(-0.05 * n, 1.05 * n);
-    StdDraw.setYscale(-0.05 * n, 1.05 * n);   // leave a border to write text
+    final double minValueOfScale = -0.05;
+    final double maxValueOfScale = 1.05;
+    StdDraw.setXscale(minValueOfScale * n, maxValueOfScale * n);
+    StdDraw.setYscale(minValueOfScale * n, maxValueOfScale * n);   // leave a border to write text
     StdDraw.filledSquare(n / 2.0, n / 2.0, n / 2.0);
+    final double scale = 0.25;
 
     // draw n-by-n grid
     int opened = 0;
     for (int row = 1; row <= n; row++) {
       for (int col = 1; col <= n; col++) {
-        if (perc.isFull(row, col)) {
+        if (percolation.isFull(row, col)) {
           StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
           opened++;
-        } else if (perc.isOpen(row, col)) {
+        } else if (percolation.isOpen(row, col)) {
           StdDraw.setPenColor(StdDraw.WHITE);
           opened++;
         } else {
           StdDraw.setPenColor(StdDraw.BLACK);
         }
-        StdDraw.filledSquare(col - 0.5, n - row + 0.5, 0.45);
+        StdDraw.filledSquare(col - scale * 2, n - row + scale * 2, scale * 2 + minValueOfScale);
       }
     }
 
     // write status text
-    StdDraw.setFont(new Font("SansSerif", Font.PLAIN, 12));
+    final int fontSize = 12;
+    final double scalePart = -0.025;
+    final double scaleTriple = 0.75;
+    StdDraw.setFont(new Font("SansSerif", Font.PLAIN, fontSize));
     StdDraw.setPenColor(StdDraw.BLACK);
-    StdDraw.text(0.25 * n, -0.025 * n, opened + " open sites");
-    if (perc.percolates()) {
-      StdDraw.text(0.75 * n, -0.025 * n, "percolates");
+    StdDraw.text(scale * n, scalePart * n, opened + " open sites");
+    if (percolation.percolates()) {
+      StdDraw.text(scaleTriple * n, scalePart * n, "percolates");
     } else {
-      StdDraw.text(0.75 * n, -0.025 * n, "does not percolate");
+      StdDraw.text(scaleTriple * n, scalePart * n, "does not percolate");
     }
 
   }
 
-  public static void main(String[] args) {
-    In in = new In(args[0]);      // input file
-    int n = in.readInt();         // n-by-n percolation system
+  /**
+   * After each site is opened, it draws full sites in light blue,
+   * open sites (that aren't full) in white, and blocked sites in black,
+   * with with site (1, 1) in the upper left-hand corner.
+   *
+   * @param args args[0] - input file
+   */
+  public static void main(final String[] args) {
+    final In in = new In(args[0]);      // input file
+    final int n = in.readInt();         // n-by-n percolation system
 
     // turn on animation mode
     StdDraw.enableDoubleBuffering();
 
     // repeatedly read in sites to open and draw resulting system
-    Percolation perc = new Percolation(n);
-    draw(perc, n);
+    final Percolation percolation = new Percolation(n);
+    draw(percolation, n);
     StdDraw.show();
     StdDraw.pause(DELAY);
     while (!in.isEmpty()) {
-      int i = in.readInt();
-      int j = in.readInt();
-      perc.open(i, j);
-      draw(perc, n);
+      final int row = in.readInt();
+      final int col = in.readInt();
+      percolation.open(row, col);
+      draw(percolation, n);
       StdDraw.show();
       StdDraw.pause(DELAY);
     }

@@ -4,11 +4,26 @@ import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 
-public class Permutation {
-  public static void main(String[] args) {
+/**
+ * Permutation client which chooses k random strings from n.
+ */
+public final class Permutation {
+  /**
+   * Utility class.
+   */
+  private Permutation() {
+  }
+
+  /**
+   * Permutation client which chooses k random strings from n.
+   *
+   * @param args args[0] = k
+   */
+  public static void main(final String[] args) {
     final int k = Integer.parseInt(args[0]);
     final RandomizedQueue<String> randomizedQueue = new RandomizedQueue<>();
     int n = 0;
+    final int percent = 100;
     while (!StdIn.isEmpty()) {
       final String value = StdIn.readString();
       final int probability = StdRandom.uniform(100);
@@ -16,7 +31,7 @@ public class Permutation {
       if (n <= k) {
         randomizedQueue.enqueue(value);
       } else {
-        if (probability * n < 100 * k) {
+        if (probability * n < k * percent) {
           randomizedQueue.dequeue();
           randomizedQueue.enqueue(value);
         }

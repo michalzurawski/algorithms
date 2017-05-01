@@ -5,26 +5,46 @@ import edu.princeton.cs.algs4.StdRandom;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * Class representing randomized queue.
+ * Based on the resizing array provides all operation in constant amortized time.
+ *
+ * @param <Item> the type of elements held in this collection
+ */
 public class RandomizedQueue<Item> implements Iterable<Item> {
-  // construct an empty randomized queue
-  private Item[] values = (Item[]) new Object[8];
+  /**
+   * Stored values.
+   */
+  private Item[] values = (Item[]) new Object[2];
+  /**
+   * Number of stored values.
+   */
   private int size = 0;
 
-  public RandomizedQueue() {
-  }
-
-  // is the queue empty?
+  /**
+   * Returns true if queue is empty.
+   *
+   * @return true if empty
+   */
   public boolean isEmpty() {
     return size == 0;
   }
 
-  // return the number of items on the queue
+  /**
+   * Return the number of items on the queue.
+   *
+   * @return number of items
+   */
   public int size() {
     return size;
   }
 
-  // add the item
-  public void enqueue(Item item) {
+  /**
+   * Adds item to the queue.
+   *
+   * @param item item to be added
+   */
+  public void enqueue(final Item item) {
     if (item == null) {
       throw new NullPointerException();
     }
@@ -35,7 +55,11 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     ++size;
   }
 
-  // remove and return a random item
+  /**
+   * Removes and returns a random item from the queue.
+   *
+   * @return removed item
+   */
   public Item dequeue() {
     if (size == 0) {
       throw new NoSuchElementException();
@@ -45,13 +69,17 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     --size;
     values[index] = values[size];
     values[size] = null;
-    if (size > 4 && size * 4 == values.length) {
+    if (size > 2 && size * 2 == values.length) {
       resize(size * 2);
     }
     return temp;
   }
 
-  // return (but do not remove) a random item
+  /**
+   * Returns but does not remove a random item from the queue.
+   *
+   * @return random item from the queue
+   */
   public Item sample() {
     if (size == 0) {
       throw new NoSuchElementException();
@@ -60,11 +88,30 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     return values[index];
   }
 
-  private static class RandomQueueIterator<Item> implements Iterator<Item> {
+  /**
+   * Class representing randomized queue iterator.
+   * Iterates over values in random order.
+   * Each iterator is independent.
+   *
+   * @param <Item> the type of elements held in this collection
+   */
+  private static final class RandomQueueIterator<Item> implements Iterator<Item> {
+    /**
+     * Values to iterate.
+     */
+    private final Item[] values;
+    /**
+     * Index of current item.
+     */
     private int index;
-    private Item[] values;
 
-    private RandomQueueIterator(int size, Item[] values) {
+    /**
+     * Creates independent random iterator.
+     *
+     * @param size   number of elements
+     * @param values elements to iterate
+     */
+    private RandomQueueIterator(final int size, final Item[] values) {
       index = size;
       this.values = (Item[]) new Object[size];
       System.arraycopy(values, 0, this.values, 0, size);
@@ -91,7 +138,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     return new RandomQueueIterator<>(size, values);
   }
 
-  private void resize(int expectedSize) {
+  /**
+   * Resize the array to expected size.
+   *
+   * @param expectedSize size to resize the array
+   */
+  private void resize(final int expectedSize) {
     final Item[] copy = (Item[]) new Object[expectedSize];
     System.arraycopy(values, 0, copy, 0, size);
     values = copy;
