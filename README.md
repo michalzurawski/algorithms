@@ -14,7 +14,7 @@ or from parent directory to build all projects.
 To run each project please use `java -jar $PROJECT_DIR/target/$PROJECT_JAR`.
 
 Javadoc documentation can be generated using `mvn javadoc:aggregate`.
-It is also available at [GitHub Pages](https://michalzurawski.github.io).
+It is also available at [GitHub Pages](https://michalzurawski.github.io/algorithms/apidocs/).
 
 ## Algorithms
 
