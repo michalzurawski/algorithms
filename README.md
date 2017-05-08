@@ -257,7 +257,7 @@ is the initial search node; the internal nodes have already been processed; the 
 in a priority queue; at each step, the A* algorithm removes the node with the smallest priority from the priority queue
 and processes it (by adding its children to both the game tree and the priority queue).
 
-![game-tree](8puzzle-game-tree.png "Game tree")
+![game-tree](puzzle/8puzzle-game-tree.png "Game tree")
 
 **Detecting unsolvable puzzles.** Not all initial boards can lead to the goal board by a sequence of legal moves,
 including the two below:

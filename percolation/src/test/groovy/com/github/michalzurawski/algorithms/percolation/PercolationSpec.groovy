@@ -109,7 +109,7 @@ class PercolationSpec extends Specification {
 
   def "should percolate for file #fileName"() {
     given:
-    In input = new In("src/test/resources/" + fileName)
+    In input = new In(getClass().getResource('/' + fileName))
     Percolation percolation = new Percolation(input.readInt())
     when:
     while (!input.isEmpty()) {

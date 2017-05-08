@@ -67,7 +67,7 @@ class BruteCollinearPointsSpec extends Specification {
   }
 
   private static Point[] createPoints(String fileName) {
-    In input = new In("src/test/resources/" + fileName)
+    In input = new In(getClass().getResource('/' + fileName))
     int n = input.readInt()
     Point[] points = new Point[n]
     for (int i = 0; i < n; ++i) {
