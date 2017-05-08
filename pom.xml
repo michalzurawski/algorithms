@@ -15,9 +15,10 @@
     </properties>
 
     <modules>
-      <module>percolation</module>
-      <module>queues</module>
-      <module>collinear-points</module>
+        <module>percolation</module>
+        <module>queues</module>
+        <module>collinear-points</module>
+        <module>puzzle</module>
     </modules>
 
     <build>

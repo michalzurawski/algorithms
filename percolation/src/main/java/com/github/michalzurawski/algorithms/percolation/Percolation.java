@@ -198,7 +198,7 @@ public class Percolation {
   }
 
   /**
-   * Checks wheter site is connected to top (i.e. its state is either CONNECTED_BOTH or CONNECTED_TOP).
+   * Checks whether site is connected to top (i.e. its state is either CONNECTED_BOTH or CONNECTED_TOP).
    *
    * @param state state of the site
    * @return true is site is connected to top
