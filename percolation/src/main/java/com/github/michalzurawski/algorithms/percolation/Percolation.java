@@ -9,7 +9,7 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
  * The system percolates when there is a connection between the top and the bottom of the grid.
  * Uses Weighted Quick Union with Path Compression algorithm.
  */
-public class Percolation {
+public final class Percolation {
 
   /**
    * Site is closed.

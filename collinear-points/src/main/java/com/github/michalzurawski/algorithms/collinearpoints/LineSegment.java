@@ -7,7 +7,7 @@ import java.awt.Color;
 /**
  * An immutable data type for Line segments in the plane.
  */
-public class LineSegment {
+public final class LineSegment {
   /**
    * One endpoint of this line segment.
    */
@@ -72,7 +72,7 @@ public class LineSegment {
   }
 
   @Override
-  public final boolean equals(final Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }

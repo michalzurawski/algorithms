@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
  *
  * @param <Item> the type of elements held in this collection
  */
-public class RandomizedQueue<Item> implements Iterable<Item> {
+public final class RandomizedQueue<Item> implements Iterable<Item> {
   /**
    * Stored values.
    */

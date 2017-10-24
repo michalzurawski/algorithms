@@ -9,7 +9,7 @@ import java.util.Collection;
  * Each block of the {@code n-by-n} board contains the unique number between <i>0</i> and <i>n^2 - 1</i>
  * where 0 represents empty block.
  */
-public class Board {
+public final class Board {
   /**
    * Board blocks.
    */

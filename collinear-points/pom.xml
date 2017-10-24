@@ -7,7 +7,7 @@
         <artifactId>algorithms</artifactId>
         <version>1.0</version>
     </parent>
-    <artifactId>collineearpoints</artifactId>
+    <artifactId>collineear-points</artifactId>
     <packaging>jar</packaging>
     <version>1.0</version>
     <name>Collinear Points</name>

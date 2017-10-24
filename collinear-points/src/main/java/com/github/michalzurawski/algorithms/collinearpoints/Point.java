@@ -7,7 +7,7 @@ import java.util.Comparator;
 /**
  * An immutable data type for points in the plane.
  */
-public class Point implements Comparable<Point> {
+public final class Point implements Comparable<Point> {
 
   /**
    * x-coordinate of this point.

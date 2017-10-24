@@ -19,6 +19,7 @@
         <module>queues</module>
         <module>collinear-points</module>
         <module>puzzle</module>
+        <module>word-net</module>
     </modules>
 
     <build>

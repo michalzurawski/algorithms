@@ -5,7 +5,7 @@ contains few algorithms and their usage implementation.
 
 All projects require Java 8 and Maven.
 
-Please not that main goal of this projects is efficiency (both time and memory) hence using *Arrays*
+Please note that main goal of this projects is efficiency (both time and memory) hence using *Arrays*
 instead of *ArrayList* or *byte[]* instead of *Enum* values.
 
 If not stated otherwise in a specific project you may compile each module using:
@@ -24,6 +24,7 @@ Currently this project contains following algorithms:
 2. [Queues](#queues)
 3. [Collinear Points](#collinear-points)
 4. [8 Puzzle](#8-puzzle)
+5. [WordNet](#wordnet)
 
 ### Percolation
 
@@ -282,7 +283,7 @@ Exactly one of the two will lead to the goal board.
 **Solver test client.** Test client read a puzzle from a file (specified as a command-line argument)
 and prints the solution to standard output.
 
-**Input and output formats.* The input and output format for a board is the board dimension *n*
+**Input and output formats.** The input and output format for a board is the board dimension *n*
 followed by the *n*-by-*n* initial board, using 0 to represent the blank square. As an example,
 
 ```
@@ -331,3 +332,75 @@ No solution possible
 
 The program works correctly for arbitrary n-by-n boards (for any 2 ≤ n < 128),
 though it might be too slow to solve some of them in a reasonable amount of time.
+
+### WordNet
+[WordNet](http://wordnet.princeton.edu/) is a semantic lexicon for the English language that is used extensively
+by computational linguists and cognitive scientists;
+for example, it was a key component in IBM's [Watson](https://en.wikipedia.org/wiki/Watson_(computer)).
+WordNet groups words into sets of synonyms called *synsets* and describes semantic relationships between them.
+One such relationship is the *is-a* relationship, which connects a *hyponym* (more specific synset)
+to a *hypernym* (more general synset). For example, *animal* is a hypernym of both *bird* and *fish*;
+*bird* is a hypernym of *eagle*, *pigeon*, and *seagull*.
+
+**The WordNet digraph.** Each vertex *v* is an integer that represents a synset, and each directed edge *v*→*w*
+represents that *w* is a hypernym of *v*. The wordnet digraph is a rooted DAG (direct acyclic graph):
+it is acyclic and has one vertex — the root — that is an ancestor of every other vertex.
+However, it is not necessarily a tree because a synset can have more than one hypernym.
+A small subgraph of the wordnet digraph is illustrated below.
+
+![word-net-example](word-net/example.png "WordNet example")
+
+**The WordNet input file formats.** The files are in CSV format: each line contains a sequence of fields, separated by commas.
+
+* *List of noun synsets*. The file *synsets.txt* lists all the (noun) synsets in WordNet.
+The first field is the synset id (an integer), the second field is the synonym set (or synset),
+and the third field is its dictionary definition (or gloss). For example, the line
+```36,AND_circuit AND_gate,a circuit in a computer that fires only when all of its inputs fire```
+means that the synset { AND_circuit, AND_gate } has an id number of 36 and it's gloss is a
+*circuit in a computer that fires only when all of its inputs fire*. The individual nouns that comprise a synset
+are separated by spaces (and a synset element is not permitted to contain a space).
+The *S* synset ids are numbered 0 through *S* − 1; the id numbers will appear consecutively in the synset file.
+
+* *List of hypernyms*. The file *hypernyms.txt* contains the hypernym relationships: The first field is a synset id;
+subsequent fields are the id numbers of the synset's hypernyms. For example, the following line
+```164,21012,56099```
+means that the the synset *164* ("Actifed") has two hypernyms: *21012* ("antihistamine")
+and *56099* ("nasal_decongestant"), representing that Actifed is both an antihistamine and a nasal decongestant.
+The synsets are obtained from the corresponding lines in the file *synsets.txt*.
+```
+164,Actifed,trade name for a drug containing an antihistamine and a decongestant...
+21012,antihistamine,a medicine used to treat allergies...
+56099,nasal_decongestant,a decongestant that provides temporary relief of nasal...
+```
+
+**Shortest ancestral path.** An ancestral path between two vertices *v* and *w* in a digraph
+is a directed path from *v* to a common ancestor *x*, together with a directed path from *w* to the same ancestor *x*.
+A shortest ancestral path is an ancestral path of minimum total length.
+For example, in the digraph at left ([digraph1.txt](word-net/digraph1.txt)),
+the shortest ancestral path between *3* and *11* has length 4 (with common ancestor *1*).
+In the digraph at right ([digraph2.txt](word-net/digraph2.txt)), one ancestral path between *1* and *5* has length 4
+(with common ancestor *5*), but the shortest ancestral path has length 2 (with common ancestor *0*).
+
+![word-net-sap](word-net/sap.png "WordNet sap example")
+
+**Measuring the semantic relatedness of two nouns.** Semantic relatedness refers to the degree to which two concepts are related.
+Measuring semantic relatedness is a challenging problem.
+For example, most of us agree that George Bush and John Kennedy (two U.S. presidents) are more related
+than are George Bush and chimpanzee (two primates).
+However, not most of us agree that George Bush and Eric Arthur Blair are related concepts.
+But if one is aware that George Bush and Eric Arthur Blair (aka George Orwell) are both communicators,
+then it becomes clear that the two concepts might be related.
+
+We define the semantic relatedness of two wordnet nouns *A* and *B* as follows:
+
+* *distance(A, B)* = distance is the minimum length of any ancestral path between any synset *v* of *A* and any synset *w* of *B*.
+
+This is the notion of distance that has been used to implement the `distance()` and `sap()` methods in the WordNet data type.
+
+**Outcast detection.** Given a list of wordnet nouns *A<sub>1</sub>*, *A<sub>2</sub>*, ..., *A<sub>n</sub>*,
+which noun is the least related to the others? To identify an outcast, we compute the sum of the distances
+between each noun and every other one:
+
+* *d<sub>i</sub>* = dist(*A<sub>i</sub>*, *A<sub>1</sub>*) + dist(*A<sub>i</sub>*, *A<sub>2</sub>*) + ... + dist(*A<sub>i</sub>*, *A<sub>n</sub>*)
+
+and return a noun *A<sub>t</sub>* for which *d<sub>t</sub>* is maximum.

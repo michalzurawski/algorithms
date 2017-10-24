@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
  *
  * @param <Item> the type of elements held in this collection
  */
-public class Deque<Item> implements Iterable<Item> {
+public final class Deque<Item> implements Iterable<Item> {
   /**
    * Node of the list.
    *
